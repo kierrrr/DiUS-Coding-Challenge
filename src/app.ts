@@ -2,12 +2,9 @@ import Checkout from "./checkout";
 import products from "./products";
 import productSpecials from "./specialProducts"
 
-
-
 const co = Checkout(productSpecials);
-// const item1 = products["mbp"];
-// const item2 = products["ipd"];
 
+const ipd = products["ipd"];
 const atv = products["atv"];
 const mbp = products["mbp"];
 

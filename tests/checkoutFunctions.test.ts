@@ -38,5 +38,5 @@ test("test_checkout_total_no_specials", () => {
     const consoleSpy = jest.spyOn(console, 'log')
     checkoutTotal(checkoutState, []).total();
     const consoleMessage = consoleSpy.mock.calls[0][0];
-    expect(consoleMessage).toBe("Total Price $6");
+    expect(consoleMessage).toBe("SKUs Scanned: sku1, sku2, sku3,  Total: $6");
 })

@@ -8,6 +8,7 @@ const scanProduct = (state: CheckoutState) => ({
 
 const checkoutTotal = (state: CheckoutState, specials: SpecialProduct[]) => ({
     total: () => {
+
         specials.forEach((applySpecial) => {
             applySpecial(state);
         });
@@ -17,7 +18,11 @@ const checkoutTotal = (state: CheckoutState, specials: SpecialProduct[]) => ({
             return prev + curr.price;
         }, 0);
 
-        console.log(`Total Price $${totalPrice}`);
+        const allSkusScanned = checkoutCart.reduce((prev, curr) => {
+            return prev + `${curr.sku}, `;
+        }, "")
+
+        console.log(`SKUs Scanned: ${allSkusScanned} Total: $${totalPrice}`)
     }
 });
 

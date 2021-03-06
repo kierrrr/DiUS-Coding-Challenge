@@ -1,11 +1,11 @@
 import { CheckoutState, StoreStock } from "./interfaces";
 
-const threeForTwo = (sku: string) => {
+const threeForTwo = (product: StoreStock) => {
     return (state: CheckoutState) => {
         const allProducts = state.cart
             .reduce((prev, curr) => {
 
-                if (curr.sku !== sku) {
+                if (curr.sku !== product.sku) {
                     return { ...prev, newCart: [...prev.newCart, curr] }
                 }
 
@@ -24,12 +24,12 @@ const threeForTwo = (sku: string) => {
     }
 };
 
-const bulkDiscount = (sku: string, threshold: number, price: number) => {
+const bulkDiscount = (product: StoreStock, threshold: number, price: number) => {
     return (state: CheckoutState) => {
 
         const allProducts = state.cart
             .reduce((prev, curr) => {
-                if (curr.sku !== sku) {
+                if (curr.sku !== product.sku) {
                     return { ...prev, newCart: [...prev.newCart, curr] }
                 }
                 return { ...prev, productsOnSpecial: [...prev.productsOnSpecial, curr] }
@@ -45,10 +45,34 @@ const bulkDiscount = (sku: string, threshold: number, price: number) => {
 
         state.cart = allProducts.newCart;
         state.checkoutProducts = [...state.checkoutProducts, ...productsOnSpecial];
-    }
+    };
+};
+
+const freeProduct = (product: StoreStock, freeProduct: StoreStock) => {
+    return (state: CheckoutState) => {
+        const allProducts = state.cart
+            .reduce((prev, curr) => {
+
+                if (curr.sku !== product.sku) {
+                    return { ...prev, newCart: [...prev.newCart, curr] };
+                }
+
+                const productOnSpecial: StoreStock = { ...freeProduct, price: 0 };
+
+                return {
+                    ...prev,
+                    productsOnSpecial: [...prev.productsOnSpecial, curr, productOnSpecial]
+                }
+
+            }, { newCart: new Array<StoreStock>(), productsOnSpecial: new Array<StoreStock>() })
+
+        state.cart = allProducts.newCart;
+        state.checkoutProducts = [...state.checkoutProducts, ...allProducts.productsOnSpecial];
+    };
 }
 
 export {
     threeForTwo,
-    bulkDiscount
+    bulkDiscount,
+    freeProduct
 }
