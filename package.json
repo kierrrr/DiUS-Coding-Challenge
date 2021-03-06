@@ -1,0 +1,23 @@
+{
+  "name": "dius-coding-challenge",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "tsc app.ts && node app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kierrrr/DiUS-Coding-Challenge.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kierrrr/DiUS-Coding-Challenge/issues"
+  },
+  "homepage": "https://github.com/kierrrr/DiUS-Coding-Challenge#readme",
+  "dependencies": {
+    "typescript": "^4.2.3"
+  }
+}
