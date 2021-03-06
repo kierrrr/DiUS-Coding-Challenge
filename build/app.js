@@ -14,24 +14,27 @@ exports.__esModule = true;
 var products_1 = require("./products");
 var scanProduct = function (state) { return ({
     scan: function (product) {
-        state.products.push(product);
+        state.cart.push(product);
     }
 }); };
-var checkoutTotal = function (state) { return ({
+var checkoutTotal = function (state, specials) { return ({
     total: function () {
-        var totalPrice = state.products.reduce(function (prev, curr) {
+        var totalPrice = state.cart.reduce(function (prev, curr) {
             return prev + curr.price;
         }, 0);
         console.log(totalPrice);
     }
 }); };
-var Checkout = function () {
+var Checkout = function (checkoutSpecials) {
     var state = {
-        products: []
+        cart: [],
+        checkoutProducts: []
     };
-    return __assign(__assign({}, scanProduct(state)), checkoutTotal(state));
+    var specials = checkoutSpecials;
+    return __assign(__assign({}, scanProduct(state)), checkoutTotal(state, specials));
 };
-var co = Checkout();
+var specials = [];
+var co = Checkout(specials);
 var item1 = products_1["default"]["mbp"];
 var item2 = products_1["default"]["ipd"];
 co.scan(item1);
