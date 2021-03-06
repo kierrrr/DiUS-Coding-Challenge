@@ -1,8 +1,9 @@
 import { SpecialProduct } from "./interfaces";
-import { threeForTwo } from "./specials";
+import { bulkDiscount, threeForTwo } from "./specials";
 
 const productSpecials: SpecialProduct[] = [
-    threeForTwo("atv")
+    threeForTwo("atv"),
+    bulkDiscount("ipd", 4, 499.99)
 ];
 
 export default productSpecials;
