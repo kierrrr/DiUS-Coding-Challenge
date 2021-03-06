@@ -23,6 +23,32 @@ const threeForTwo = (sku: string) => {
     }
 };
 
+const bulkDiscount = (sku: string, threshold: number, price: number) => {
+    return (state: CheckoutState) => {
+
+        const allProducts = state.cart
+            .reduce((prev, curr) => {
+                if (curr.sku !== sku) {
+                    return { ...prev, newCart: [...prev.newCart, curr] }
+                } else {
+                    return { ...prev, productsOnSpecial: [...prev.productsOnSpecial, curr] }
+                }
+            }, { newCart: new Array<StoreStock>(), productsOnSpecial: new Array<StoreStock>() })
+
+        const productsOnSpecial = allProducts.productsOnSpecial
+            .map((currentProduct, _, allProducts) => {
+                return {
+                    ...currentProduct,
+                    price: allProducts.length > threshold ? price : currentProduct.price
+                }
+            })
+
+        state.cart = allProducts.newCart;
+        state.checkoutProducts = [...state.checkoutProducts, ...productsOnSpecial];
+    }
+}
+
 export {
-    threeForTwo
+    threeForTwo,
+    bulkDiscount
 }

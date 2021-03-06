@@ -7,7 +7,6 @@ const scanProduct = (state: CheckoutState) => ({
 });
 
 const checkoutTotal = (state: CheckoutState, specials: SpecialProduct[]) => ({
-
     total: () => {
         specials.forEach((applySpecial) => {
             applySpecial(state);
