@@ -1,51 +1,18 @@
-import { StoreStock } from "./interfaces";
+import Checkout from "./checkout";
 import products from "./products";
+import productSpecials from "./specialProducts"
 
 
-interface CheckoutState {
-    cart: StoreStock[],
-    checkoutProducts: StoreStock[]
-}
 
-const scanProduct = (state: CheckoutState) => ({
-    scan: (product: StoreStock) => {
-        state.cart.push(product)
-    }
-});
+const co = Checkout(productSpecials);
+// const item1 = products["mbp"];
+// const item2 = products["ipd"];
 
-const checkoutTotal = (state: CheckoutState, specials: Specials[]) => ({
-    total: () => {
-        const totalPrice = state.cart.reduce((prev, curr) => {
-            return prev + curr.price
-        }, 0)
-        console.log(totalPrice)
-    }
-});
+const atv = products["atv"];
+const mbp = products["mbp"];
 
-
-interface Specials {
-    sku: string,
-    someFunc: (state: CheckoutState, sku: string) => void
-}
-
-const Checkout = (checkoutSpecials: Specials[]) => {
-    const state: CheckoutState = {
-        cart: [],
-        checkoutProducts: []
-    };
-    const specials: Specials[] = checkoutSpecials;
-
-    return {
-        ...scanProduct(state),
-        ...checkoutTotal(state, specials)
-    };
-};
-
-const specials: Specials[] = [];
-const co = Checkout(specials);
-const item1 = products["mbp"];
-const item2 = products["ipd"];
-
-co.scan(item1);
-co.scan(item2);
+co.scan(atv);
+co.scan(atv);
+co.scan(atv);
+co.scan(mbp);
 co.total();

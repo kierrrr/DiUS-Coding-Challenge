@@ -10,8 +10,14 @@ var __assign = (this && this.__assign) || function () {
     };
     return __assign.apply(this, arguments);
 };
+var __spreadArray = (this && this.__spreadArray) || function (to, from) {
+    for (var i = 0, il = from.length, j = to.length; i < il; i++, j++)
+        to[j] = from[i];
+    return to;
+};
 exports.__esModule = true;
 var products_1 = require("./products");
+var specialProducts_1 = require("./specialProducts");
 var scanProduct = function (state) { return ({
     scan: function (product) {
         state.cart.push(product);
@@ -19,10 +25,14 @@ var scanProduct = function (state) { return ({
 }); };
 var checkoutTotal = function (state, specials) { return ({
     total: function () {
-        var totalPrice = state.cart.reduce(function (prev, curr) {
+        specials.forEach(function (thing) {
+            thing(state);
+        });
+        var checkoutCart = __spreadArray(__spreadArray([], state.cart), state.checkoutProducts);
+        var totalPrice = checkoutCart.reduce(function (prev, curr) {
             return prev + curr.price;
         }, 0);
-        console.log(totalPrice);
+        console.log("Total Price $" + totalPrice);
     }
 }); };
 var Checkout = function (checkoutSpecials) {
@@ -33,10 +43,13 @@ var Checkout = function (checkoutSpecials) {
     var specials = checkoutSpecials;
     return __assign(__assign({}, scanProduct(state)), checkoutTotal(state, specials));
 };
-var specials = [];
-var co = Checkout(specials);
-var item1 = products_1["default"]["mbp"];
-var item2 = products_1["default"]["ipd"];
-co.scan(item1);
-co.scan(item2);
+var co = Checkout(specialProducts_1["default"]);
+// const item1 = products["mbp"];
+// const item2 = products["ipd"];
+var atv = products_1["default"]["atv"];
+var mbp = products_1["default"]["mbp"];
+co.scan(atv);
+co.scan(atv);
+co.scan(atv);
+co.scan(mbp);
 co.total();

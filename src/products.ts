@@ -4,22 +4,22 @@ const products: StoreStocks = {
     "ipd": {
         sku: "ipd",
         name: "Super iPad",
-        price: 549.99
+        price: 10
     },
     "mbp": {
         sku: "mbp",
         name: "MacBook Pro",
-        price: 1399.99
+        price: 10
     },
     "atv": {
         sku: "atv",
         name: "Apple TV",
-        price: 109.50
+        price: 10
     },
     "vga": {
         sku: "vga",
         name: "VGA adapter",
-        price: 30.00
+        price: 10
     }
 }
 
