@@ -4,22 +4,22 @@ var products = {
     "ipd": {
         sku: "ipd",
         name: "Super iPad",
-        price: 10
+        price: 549.99
     },
     "mbp": {
         sku: "mbp",
         name: "MacBook Pro",
-        price: 10
+        price: 1399.99
     },
     "atv": {
         sku: "atv",
         name: "Apple TV",
-        price: 10
+        price: 109.50
     },
     "vga": {
         sku: "vga",
         name: "VGA adapter",
-        price: 10
+        price: 30.00
     }
 };
 exports["default"] = products;

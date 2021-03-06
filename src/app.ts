@@ -1,6 +1,6 @@
 import Checkout from "./checkout";
 import products from "./products";
-import productSpecials from "./specialProducts"
+import productSpecials from "./productSpecials"
 
 const co = Checkout(productSpecials);
 

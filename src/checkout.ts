@@ -6,11 +6,10 @@ const Checkout = (checkoutSpecials: SpecialProduct[]) => {
         cart: [],
         checkoutProducts: []
     };
-    const specials: SpecialProduct[] = checkoutSpecials;
 
     return {
         ...scanProduct(state),
-        ...checkoutTotal(state, specials)
+        ...checkoutTotal(state, checkoutSpecials)
     };
 };
 

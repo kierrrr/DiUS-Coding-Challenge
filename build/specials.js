@@ -16,24 +16,54 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from) {
     return to;
 };
 exports.__esModule = true;
-exports.threeForTwo = void 0;
-var threeForTwo = function (sku) {
+exports.freeProduct = exports.bulkDiscount = exports.threeForTwo = void 0;
+var threeForTwo = function (product) {
     return function (state) {
-        var newCart = [];
-        var productsOnSpecial = state.cart.reduce(function (specialProducts, currentProduct) {
-            // Remove the products that are not part of this special
-            if (currentProduct.sku !== sku) {
-                newCart.push(currentProduct);
-                return specialProducts;
+        var allProducts = state.cart
+            .reduce(function (prev, curr) {
+            if (curr.sku !== product.sku) {
+                return __assign(__assign({}, prev), { newCart: __spreadArray(__spreadArray([], prev.newCart), [curr]) });
             }
-            ;
             // Every 3rd product is free
-            var newPrice = (specialProducts.count % 3 === 0) ? 0 : currentProduct.price;
-            var productOnSpecial = __assign(__assign({}, currentProduct), { price: newPrice });
-            return { newCart: __spreadArray(__spreadArray([], specialProducts.newCart), [productOnSpecial]), count: specialProducts.count + 1 };
-        }, { newCart: new Array(), count: 1 });
-        state.cart = newCart;
-        state.checkoutProducts = __spreadArray(__spreadArray([], state.checkoutProducts), productsOnSpecial.newCart);
+            var newPrice = (prev.count % 3 === 0) ? 0 : curr.price;
+            var productOnSpecial = __assign(__assign({}, curr), { price: newPrice });
+            return __assign(__assign({}, prev), { productsOnSpecial: __spreadArray(__spreadArray([], prev.productsOnSpecial), [productOnSpecial]), count: prev.count + 1 });
+        }, { newCart: new Array(), productsOnSpecial: new Array(), count: 1 });
+        state.cart = allProducts.newCart;
+        state.checkoutProducts = __spreadArray(__spreadArray([], state.checkoutProducts), allProducts.productsOnSpecial);
     };
 };
 exports.threeForTwo = threeForTwo;
+var bulkDiscount = function (product, threshold, price) {
+    return function (state) {
+        var allProducts = state.cart
+            .reduce(function (prev, curr) {
+            if (curr.sku !== product.sku) {
+                return __assign(__assign({}, prev), { newCart: __spreadArray(__spreadArray([], prev.newCart), [curr]) });
+            }
+            return __assign(__assign({}, prev), { productsOnSpecial: __spreadArray(__spreadArray([], prev.productsOnSpecial), [curr]) });
+        }, { newCart: new Array(), productsOnSpecial: new Array() });
+        var productsOnSpecial = allProducts.productsOnSpecial
+            .map(function (currentProduct, _, allProducts) {
+            return __assign(__assign({}, currentProduct), { price: allProducts.length > threshold ? price : currentProduct.price });
+        });
+        state.cart = allProducts.newCart;
+        state.checkoutProducts = __spreadArray(__spreadArray([], state.checkoutProducts), productsOnSpecial);
+    };
+};
+exports.bulkDiscount = bulkDiscount;
+var freeProduct = function (product, freeProduct) {
+    return function (state) {
+        var allProducts = state.cart
+            .reduce(function (prev, curr) {
+            if (curr.sku !== product.sku) {
+                return __assign(__assign({}, prev), { newCart: __spreadArray(__spreadArray([], prev.newCart), [curr]) });
+            }
+            var productOnSpecial = __assign(__assign({}, freeProduct), { price: 0 });
+            return __assign(__assign({}, prev), { productsOnSpecial: __spreadArray(__spreadArray([], prev.productsOnSpecial), [curr, productOnSpecial]) });
+        }, { newCart: new Array(), productsOnSpecial: new Array() });
+        state.cart = allProducts.newCart;
+        state.checkoutProducts = __spreadArray(__spreadArray([], state.checkoutProducts), allProducts.productsOnSpecial);
+    };
+};
+exports.freeProduct = freeProduct;
