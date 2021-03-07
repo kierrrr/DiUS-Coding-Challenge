@@ -32,11 +32,11 @@ var threeForTwo = function (product) {
             // Every 3rd product is free
             var newPrice = (allProducts.promotionCount % 3 === 0) ? 0 : currentProduct.price;
             var productOnSpecial = __assign(__assign({}, currentProduct), { price: newPrice });
-            return __assign(__assign({}, allProducts), { productsOnSpecial: __spreadArray(__spreadArray([], allProducts.productsOnSpecial), [productOnSpecial]), promotionCount: allProducts.promotionCount + 1 });
-        }, { newCart: new Array(), productsOnSpecial: new Array(), promotionCount: 1 });
+            return __assign(__assign({}, allProducts), { promotionProducts: __spreadArray(__spreadArray([], allProducts.promotionProducts), [productOnSpecial]), promotionCount: allProducts.promotionCount + 1 });
+        }, { newCart: new Array(), promotionProducts: new Array(), promotionCount: 1 });
         // Update the state of the cart
         state.cart = eligibility.newCart;
-        state.checkoutProducts = __spreadArray(__spreadArray([], state.checkoutProducts), eligibility.productsOnSpecial);
+        state.checkoutProducts = __spreadArray(__spreadArray([], state.checkoutProducts), eligibility.promotionProducts);
     };
 };
 exports.threeForTwo = threeForTwo;
@@ -53,16 +53,16 @@ var bulkDiscount = function (product, threshold, price) {
             }
             ;
             // Otherwise, keep track of the eligible ones
-            return __assign(__assign({}, allProducts), { productsOnSpecial: __spreadArray(__spreadArray([], allProducts.productsOnSpecial), [currentProduct]) });
-        }, { newCart: new Array(), productsOnSpecial: new Array() });
-        // Update the price of each product that is eligible
-        var productsOnSpecial = eligibility.productsOnSpecial
+            return __assign(__assign({}, allProducts), { promotionProducts: __spreadArray(__spreadArray([], allProducts.promotionProducts), [currentProduct]) });
+        }, { newCart: new Array(), promotionProducts: new Array() });
+        // Update the price of each product if it is eligible for promotion
+        var promotionProducts = eligibility.promotionProducts
             .map(function (currentProduct, _, allProducts) {
             return __assign(__assign({}, currentProduct), { price: allProducts.length > threshold ? price : currentProduct.price });
         });
         // Update state of the cart
         state.cart = eligibility.newCart;
-        state.checkoutProducts = __spreadArray(__spreadArray([], state.checkoutProducts), productsOnSpecial);
+        state.checkoutProducts = __spreadArray(__spreadArray([], state.checkoutProducts), promotionProducts);
     };
 };
 exports.bulkDiscount = bulkDiscount;
@@ -72,25 +72,25 @@ var freeItem = function (product, freeProduct) {
     return function (state) {
         var numberOfEligibleProducts = state.cart.filter(function (curr) { return curr.sku === product.sku; }).length;
         var eligibility = state.cart
-            .reduce(function (prev, curr) {
+            .reduce(function (allProducts, currentProduct) {
             // Keeps track of the product that links to the promotion
-            if (curr.sku === product.sku) {
-                return __assign(__assign({}, prev), { productsOnSpecial: __spreadArray(__spreadArray([], prev.productsOnSpecial), [curr]) });
+            if (currentProduct.sku === product.sku) {
+                return __assign(__assign({}, allProducts), { promotionProducts: __spreadArray(__spreadArray([], allProducts.promotionProducts), [currentProduct]) });
             }
             // Change the price of the free item as it is eligible in this promotion
-            else if (curr.sku === freeProduct.sku && numberOfEligibleProducts > 0) {
+            else if (currentProduct.sku === freeProduct.sku && numberOfEligibleProducts > 0) {
                 numberOfEligibleProducts -= 1; // Keep track of the number of free products we can give away
-                var freeProduct_1 = __assign(__assign({}, curr), { price: 0 });
-                return __assign(__assign({}, prev), { productsOnSpecial: __spreadArray(__spreadArray([], prev.productsOnSpecial), [freeProduct_1]) });
+                var freeProduct_1 = __assign(__assign({}, currentProduct), { price: 0 });
+                return __assign(__assign({}, allProducts), { promotionProducts: __spreadArray(__spreadArray([], allProducts.promotionProducts), [freeProduct_1]) });
             }
             // Ignore the ineligible products for promotion
             else {
-                return __assign(__assign({}, prev), { newCart: __spreadArray(__spreadArray([], prev.newCart), [curr]) });
+                return __assign(__assign({}, allProducts), { newCart: __spreadArray(__spreadArray([], allProducts.newCart), [currentProduct]) });
             }
-        }, { newCart: new Array(), productsOnSpecial: new Array() });
+        }, { newCart: new Array(), promotionProducts: new Array() });
         // Update state of the cart
         state.cart = eligibility.newCart;
-        state.checkoutProducts = __spreadArray(__spreadArray([], state.checkoutProducts), eligibility.productsOnSpecial);
+        state.checkoutProducts = __spreadArray(__spreadArray([], state.checkoutProducts), eligibility.promotionProducts);
     };
 };
 exports.freeItem = freeItem;

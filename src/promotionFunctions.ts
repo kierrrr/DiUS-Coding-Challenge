@@ -18,14 +18,14 @@ const threeForTwo = (product: Product) => {
                 const productOnSpecial: Product = { ...currentProduct, price: newPrice };
                 return {
                     ...allProducts,
-                    productsOnSpecial: [...allProducts.productsOnSpecial, productOnSpecial],
+                    promotionProducts: [...allProducts.promotionProducts, productOnSpecial],
                     promotionCount: allProducts.promotionCount + 1
                 };
-            }, { newCart: new Array<Product>(), productsOnSpecial: new Array<Product>(), promotionCount: 1 });
+            }, { newCart: new Array<Product>(), promotionProducts: new Array<Product>(), promotionCount: 1 });
 
         // Update the state of the cart
         state.cart = eligibility.newCart;
-        state.checkoutProducts = [...state.checkoutProducts, ...eligibility.productsOnSpecial];
+        state.checkoutProducts = [...state.checkoutProducts, ...eligibility.promotionProducts];
     }
 };
 
@@ -43,11 +43,11 @@ const bulkDiscount = (product: Product, threshold: number, price: number) => {
                 };
 
                 // Otherwise, keep track of the eligible ones
-                return { ...allProducts, productsOnSpecial: [...allProducts.productsOnSpecial, currentProduct] };
-            }, { newCart: new Array<Product>(), productsOnSpecial: new Array<Product>() });
+                return { ...allProducts, promotionProducts: [...allProducts.promotionProducts, currentProduct] };
+            }, { newCart: new Array<Product>(), promotionProducts: new Array<Product>() });
 
-        // Update the price of each product that is eligible
-        const productsOnSpecial = eligibility.productsOnSpecial
+        // Update the price of each product if it is eligible for promotion
+        const promotionProducts = eligibility.promotionProducts
             .map((currentProduct, _, allProducts) => {
                 return {
                     ...currentProduct,
@@ -57,7 +57,7 @@ const bulkDiscount = (product: Product, threshold: number, price: number) => {
 
         // Update state of the cart
         state.cart = eligibility.newCart;
-        state.checkoutProducts = [...state.checkoutProducts, ...productsOnSpecial];
+        state.checkoutProducts = [...state.checkoutProducts, ...promotionProducts];
     };
 };
 
@@ -69,28 +69,28 @@ const freeItem = (product: Product, freeProduct: Product) => {
         let numberOfEligibleProducts = state.cart.filter(curr => curr.sku === product.sku).length;
 
         const eligibility = state.cart
-            .reduce((prev, curr) => {
+            .reduce((allProducts, currentProduct) => {
 
                 // Keeps track of the product that links to the promotion
-                if (curr.sku === product.sku) {
-                    return { ...prev, productsOnSpecial: [...prev.productsOnSpecial, curr] };
+                if (currentProduct.sku === product.sku) {
+                    return { ...allProducts, promotionProducts: [...allProducts.promotionProducts, currentProduct] };
                 }
                 // Change the price of the free item as it is eligible in this promotion
-                else if (curr.sku === freeProduct.sku && numberOfEligibleProducts > 0) {
+                else if (currentProduct.sku === freeProduct.sku && numberOfEligibleProducts > 0) {
                     numberOfEligibleProducts -= 1; // Keep track of the number of free products we can give away
-                    const freeProduct: Product = { ...curr, price: 0 };
-                    return { ...prev, productsOnSpecial: [...prev.productsOnSpecial, freeProduct] };
+                    const freeProduct: Product = { ...currentProduct, price: 0 };
+                    return { ...allProducts, promotionProducts: [...allProducts.promotionProducts, freeProduct] };
                 }
                 // Ignore the ineligible products for promotion
                 else {
-                    return { ...prev, newCart: [...prev.newCart, curr] };
+                    return { ...allProducts, newCart: [...allProducts.newCart, currentProduct] };
                 }
 
-            }, { newCart: new Array<Product>(), productsOnSpecial: new Array<Product>() });
+            }, { newCart: new Array<Product>(), promotionProducts: new Array<Product>() });
 
         // Update state of the cart
         state.cart = eligibility.newCart;
-        state.checkoutProducts = [...state.checkoutProducts, ...eligibility.productsOnSpecial];
+        state.checkoutProducts = [...state.checkoutProducts, ...eligibility.promotionProducts];
     };
 }
 
