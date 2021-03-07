@@ -1,6 +1,6 @@
 import { Promotion } from "./interfaces";
 import { bulkDiscount, threeForTwo, freeProduct } from "./promotionFunctions";
-import product from "./products";
+import product from "./stock";
 
 const allPromotions: Promotion[] = [
     threeForTwo(product["atv"]),

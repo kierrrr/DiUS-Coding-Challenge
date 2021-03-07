@@ -1,10 +1,14 @@
 import { CheckoutState, Product } from "./interfaces";
 
+// Generic three for two promotion
+// Example: we're going to have a 3 for 2 deal on Apple TVs. For example, if you buy 3 Apple TVs, 
+// you will pay the price of 2 only
 const threeForTwo = (product: Product) => {
     return (state: CheckoutState) => {
         const allProducts = state.cart
             .reduce((prev, curr) => {
 
+                // Ignore the ineligible products for promotion
                 if (curr.sku !== product.sku) {
                     return { ...prev, newCart: [...prev.newCart, curr] };
                 };
@@ -24,6 +28,9 @@ const threeForTwo = (product: Product) => {
     }
 };
 
+// Generic bulk discount promotion
+// Example: the brand new Super iPad will have a bulk discounted applied, where the price will drop 
+// to $499.99 each, if someone buys more than 4
 const bulkDiscount = (product: Product, threshold: number, price: number) => {
     return (state: CheckoutState) => {
         const allProducts = state.cart
@@ -47,6 +54,8 @@ const bulkDiscount = (product: Product, threshold: number, price: number) => {
     };
 };
 
+// Generic promotion for a free product when you buy a particular product
+// Example: we will bundle in a free VGA adapter free of charge with every MacBook Pro sold
 const freeProduct = (product: Product, freeProduct: Product) => {
     return (state: CheckoutState) => {
 

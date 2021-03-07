@@ -1,5 +1,5 @@
 import Checkout from "./checkout";
-import products from "./products";
+import products from "./stock";
 import allPromotions from "./promotions";
 
 const co = Checkout(allPromotions);

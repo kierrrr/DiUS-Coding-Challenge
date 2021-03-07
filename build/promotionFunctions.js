@@ -17,10 +17,14 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from) {
 };
 exports.__esModule = true;
 exports.freeProduct = exports.bulkDiscount = exports.threeForTwo = void 0;
+// Generic three for two promotion
+// Example: we're going to have a 3 for 2 deal on Apple TVs. For example, if you buy 3 Apple TVs, 
+// you will pay the price of 2 only
 var threeForTwo = function (product) {
     return function (state) {
         var allProducts = state.cart
             .reduce(function (prev, curr) {
+            // Ignore the ineligible products for promotion
             if (curr.sku !== product.sku) {
                 return __assign(__assign({}, prev), { newCart: __spreadArray(__spreadArray([], prev.newCart), [curr]) });
             }
@@ -35,6 +39,9 @@ var threeForTwo = function (product) {
     };
 };
 exports.threeForTwo = threeForTwo;
+// Generic bulk discount promotion
+// Example: the brand new Super iPad will have a bulk discounted applied, where the price will drop 
+// to $499.99 each, if someone buys more than 4
 var bulkDiscount = function (product, threshold, price) {
     return function (state) {
         var allProducts = state.cart
@@ -54,6 +61,8 @@ var bulkDiscount = function (product, threshold, price) {
     };
 };
 exports.bulkDiscount = bulkDiscount;
+// Generic promotion for a free product when you buy a particular product
+// Example: we will bundle in a free VGA adapter free of charge with every MacBook Pro sold
 var freeProduct = function (product, freeProduct) {
     return function (state) {
         var numberOfProductOnSpecial = state.cart.filter(function (curr) { return curr.sku === product.sku; }).length;
