@@ -1,6 +1,6 @@
 import Checkout from "../src/checkout";
-import { StoreStock } from "../src/interfaces";
-import { threeForTwo, bulkDiscount, freeProduct } from "../src/specials";
+import { Product } from "../src/interfaces";
+import { threeForTwo, bulkDiscount, freeProduct } from "../src/promotionFunctions";
 
 test('test_checkout_three_atvs_one_vga', () => {
     jest.clearAllMocks();
@@ -49,10 +49,10 @@ test('test_checkout_one_mbp_one_ipd', () => {
     expect(consoleMessage).toBe("SKUs Scanned: ipd, mbp, vga,  Total: $1949.98");
 });
 
-const atv: StoreStock = { sku: "atv", "name": "Apple TV", price: 109.50 };
-const vga: StoreStock = { sku: "vga", "name": "VGA adapter", price: 30.00 };
-const ipd: StoreStock = { sku: "ipd", name: "Super iPad", price: 549.99 };
-const mbp: StoreStock = { sku: "mbp", name: "MacBook Pro", price: 1399.99 };
+const atv: Product = { sku: "atv", "name": "Apple TV", price: 109.50 };
+const vga: Product = { sku: "vga", "name": "VGA adapter", price: 30.00 };
+const ipd: Product = { sku: "ipd", name: "Super iPad", price: 549.99 };
+const mbp: Product = { sku: "mbp", name: "MacBook Pro", price: 1399.99 };
 
 const specials = [
     threeForTwo(atv),

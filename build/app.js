@@ -2,11 +2,12 @@
 exports.__esModule = true;
 var checkout_1 = require("./checkout");
 var products_1 = require("./products");
-var productSpecials_1 = require("./productSpecials");
-var co = checkout_1["default"](productSpecials_1["default"]);
+var promotions_1 = require("./promotions");
+var co = checkout_1["default"](promotions_1["default"]);
 var ipd = products_1["default"]["ipd"];
 var atv = products_1["default"]["atv"];
 var mbp = products_1["default"]["mbp"];
+var vga = products_1["default"]["vga"];
 co.scan(atv);
 co.scan(atv);
 co.scan(atv);

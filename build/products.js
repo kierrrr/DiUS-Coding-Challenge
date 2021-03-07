@@ -1,6 +1,6 @@
 "use strict";
 exports.__esModule = true;
-var products = {
+var allStock = {
     "ipd": {
         sku: "ipd",
         name: "Super iPad",
@@ -22,4 +22,4 @@ var products = {
         price: 30.00
     }
 };
-exports["default"] = products;
+exports["default"] = allStock;

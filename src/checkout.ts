@@ -1,7 +1,7 @@
-import { CheckoutState, SpecialProduct } from "./interfaces";
+import { CheckoutState, Promotion } from "./interfaces";
 import { scanProduct, checkoutTotal } from "./checkoutFunctions";
 
-const Checkout = (checkoutSpecials: SpecialProduct[]) => {
+const Checkout = (promotions: Promotion[]) => {
     const state: CheckoutState = {
         cart: [],
         checkoutProducts: []
@@ -9,7 +9,7 @@ const Checkout = (checkoutSpecials: SpecialProduct[]) => {
 
     return {
         ...scanProduct(state),
-        ...checkoutTotal(state, checkoutSpecials)
+        ...checkoutTotal(state, promotions)
     };
 };
 

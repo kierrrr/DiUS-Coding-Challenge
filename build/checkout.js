@@ -12,11 +12,11 @@ var __assign = (this && this.__assign) || function () {
 };
 exports.__esModule = true;
 var checkoutFunctions_1 = require("./checkoutFunctions");
-var Checkout = function (checkoutSpecials) {
+var Checkout = function (promotions) {
     var state = {
         cart: [],
         checkoutProducts: []
     };
-    return __assign(__assign({}, checkoutFunctions_1.scanProduct(state)), checkoutFunctions_1.checkoutTotal(state, checkoutSpecials));
+    return __assign(__assign({}, checkoutFunctions_1.scanProduct(state)), checkoutFunctions_1.checkoutTotal(state, promotions));
 };
 exports["default"] = Checkout;

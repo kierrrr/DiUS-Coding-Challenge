@@ -12,10 +12,10 @@ var scanProduct = function (state) { return ({
     }
 }); };
 exports.scanProduct = scanProduct;
-var checkoutTotal = function (state, specials) { return ({
+var checkoutTotal = function (state, promotions) { return ({
     total: function () {
-        specials.forEach(function (applySpecial) {
-            applySpecial(state);
+        promotions.forEach(function (applyPromotion) {
+            applyPromotion(state);
         });
         var checkoutCart = __spreadArray(__spreadArray([], state.cart), state.checkoutProducts);
         var totalPrice = checkoutCart.reduce(function (prev, curr) {

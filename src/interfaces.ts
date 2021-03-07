@@ -1,24 +1,23 @@
-interface StoreStock {
+interface Product {
     readonly sku: string,
     readonly name: string,
     readonly price: number
 };
 
-interface StoreStocks {
-    readonly [key: string]: StoreStock
-}
+interface Stock {
+    readonly [key: string]: Product
+};
 
 interface CheckoutState {
-    cart: StoreStock[],
-    checkoutProducts: StoreStock[]
-}
+    cart: Product[],
+    checkoutProducts: Product[]
+};
 
-type SpecialProduct = (state: CheckoutState) => void;
-
+type Promotion = (state: CheckoutState) => void;
 
 export {
-    StoreStock,
-    StoreStocks,
+    Product,
+    Stock,
     CheckoutState,
-    SpecialProduct
+    Promotion
 };

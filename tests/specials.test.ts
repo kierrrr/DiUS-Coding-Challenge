@@ -1,5 +1,5 @@
-import { CheckoutState, StoreStock } from "../src/interfaces"
-import { threeForTwo, bulkDiscount, freeProduct } from "../src/specials";
+import { CheckoutState, Product } from "../src/interfaces"
+import { threeForTwo, bulkDiscount, freeProduct } from "../src/promotionFunctions";
 
 test("test_special_three_for_two_with_three_products", () => {
 
@@ -125,7 +125,7 @@ const testStock = {
 };
 
 const createStoreStocks = (num: number): CheckoutState => {
-    const stock1: StoreStock = { ...testStock };
+    const stock1: Product = { ...testStock };
 
     const checkoutState: CheckoutState = {
         cart: [...Array(num)].map(_ => stock1),

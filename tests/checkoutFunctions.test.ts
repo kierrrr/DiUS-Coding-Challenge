@@ -1,10 +1,10 @@
-import { StoreStock, CheckoutState } from "../src/interfaces"
+import { Product, CheckoutState } from "../src/interfaces"
 import { scanProduct, checkoutTotal } from "../src/checkoutFunctions";
 
 test("test_checkout_scan_products", () => {
-    const stock1: StoreStock = { sku: "sku1", name: "stock1", price: 1 };
-    const stock2: StoreStock = { sku: "sku2", name: "stock2", price: 2 };
-    const stock3: StoreStock = { sku: "sku3", name: "stock3", price: 3 };
+    const stock1: Product = { sku: "sku1", name: "stock1", price: 1 };
+    const stock2: Product = { sku: "sku2", name: "stock2", price: 2 };
+    const stock3: Product = { sku: "sku3", name: "stock3", price: 3 };
 
     const checkoutState: CheckoutState = {
         cart: [],
@@ -26,9 +26,9 @@ test("test_checkout_scan_products", () => {
 });
 
 test("test_checkout_total_no_specials", () => {
-    const stock1: StoreStock = { sku: "sku1", name: "stock1", price: 1 };
-    const stock2: StoreStock = { sku: "sku2", name: "stock2", price: 2 };
-    const stock3: StoreStock = { sku: "sku3", name: "stock3", price: 3 };
+    const stock1: Product = { sku: "sku1", name: "stock1", price: 1 };
+    const stock2: Product = { sku: "sku2", name: "stock2", price: 2 };
+    const stock3: Product = { sku: "sku3", name: "stock3", price: 3 };
 
     const checkoutState: CheckoutState = {
         cart: [stock1, stock2, stock3],

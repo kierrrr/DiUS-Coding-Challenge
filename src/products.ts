@@ -1,6 +1,6 @@
-import { StoreStocks } from './interfaces';
+import { Stock } from './interfaces';
 
-const products: StoreStocks = {
+const allStock: Stock = {
     "ipd": {
         sku: "ipd",
         name: "Super iPad",
@@ -21,6 +21,6 @@ const products: StoreStocks = {
         name: "VGA adapter",
         price: 30.00
     }
-}
+};
 
-export default products;
+export default allStock;

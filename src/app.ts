@@ -1,12 +1,13 @@
 import Checkout from "./checkout";
 import products from "./products";
-import productSpecials from "./productSpecials"
+import allPromotions from "./promotions";
 
-const co = Checkout(productSpecials);
+const co = Checkout(allPromotions);
 
 const ipd = products["ipd"];
 const atv = products["atv"];
 const mbp = products["mbp"];
+const vga = products["vga"];
 
 co.scan(atv);
 co.scan(atv);
