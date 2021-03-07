@@ -66,16 +66,18 @@ test("test_special_bulk_discount_with_none_discounted", () => {
 
 test("test_special_free_product_all_discounted", () => {
     const freeStock = { sku: "freeSku", name: "freeName", price: 1 };
-    const checkoutState = createStoreStocks(3);
+    const checkoutState = createStoreStocks(2);
+    checkoutState.cart.push(freeStock);
+    checkoutState.cart.push(freeStock);
 
     freeProduct(testStock, freeStock)(checkoutState);
     const totalPrice = getTotalCheckoutPrice(checkoutState);
-    const allFreeProducts = checkoutState.checkoutProducts.filter(product => product.sku == freeStock.sku)
+    const allFreeProducts = checkoutState.checkoutProducts.filter(product => product.price == 0)
 
-    expect(totalPrice).toBe(3);
+    expect(totalPrice).toBe(2);
     expect(checkoutState.cart.length).toBe(0);
-    expect(checkoutState.checkoutProducts.length).toBe(6);
-    expect(allFreeProducts.length).toBe(3);
+    expect(checkoutState.checkoutProducts.length).toBe(4);
+    expect(allFreeProducts.length).toBe(2);
 });
 
 test("test_special_free_product_none_discounted", () => {
@@ -90,6 +92,23 @@ test("test_special_free_product_none_discounted", () => {
     expect(totalPrice).toBe(3);
     expect(checkoutState.checkoutProducts.length).toBe(0);
     expect(allFreeProducts.length).toBe(0);
+});
+
+test("test_special_free_product_one_scanned_not_free", () => {
+    const freeStock = { sku: "freeSku", name: "freeName", price: 1 };
+    const checkoutState = createStoreStocks(2);
+    checkoutState.cart.push(freeStock);
+    checkoutState.cart.push(freeStock);
+    // There are only 2 products which matches the freebie. This one not be free
+    checkoutState.cart.push(freeStock);
+
+    freeProduct(testStock, freeStock)(checkoutState);
+    const totalPrice = getTotalCheckoutPrice(checkoutState);
+    const allFreeProducts = checkoutState.checkoutProducts.filter(product => product.price == 0)
+
+    expect(totalPrice).toBe(3);
+    expect(checkoutState.checkoutProducts.length).toBe(4);
+    expect(allFreeProducts.length).toBe(2);
 });
 
 const getTotalCheckoutPrice = (checkoutState: CheckoutState) => {

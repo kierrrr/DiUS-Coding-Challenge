@@ -50,18 +50,20 @@ const bulkDiscount = (product: StoreStock, threshold: number, price: number) => 
 
 const freeProduct = (product: StoreStock, freeProduct: StoreStock) => {
     return (state: CheckoutState) => {
+
+        let numberOfProductOnSpecial = state.cart.filter(curr => curr.sku === product.sku).length;
+
         const allProducts = state.cart
             .reduce((prev, curr) => {
 
-                if (curr.sku !== product.sku) {
-                    return { ...prev, newCart: [...prev.newCart, curr] };
-                }
-
-                const productOnSpecial: StoreStock = { ...freeProduct, price: 0 };
-
-                return {
-                    ...prev,
-                    productsOnSpecial: [...prev.productsOnSpecial, curr, productOnSpecial]
+                if (curr.sku === product.sku) {
+                    return { ...prev, productsOnSpecial: [...prev.productsOnSpecial, curr] };
+                } else if (curr.sku === freeProduct.sku && numberOfProductOnSpecial > 0) {
+                    numberOfProductOnSpecial -= 1;
+                    const free: StoreStock = { ...curr, price: 0 };
+                    return { ...prev, productsOnSpecial: [...prev.productsOnSpecial, free] };
+                } else {
+                    return { ...prev, newCart: [...prev.newCart, curr] }
                 }
 
             }, { newCart: new Array<StoreStock>(), productsOnSpecial: new Array<StoreStock>() })

@@ -41,6 +41,7 @@ test('test_checkout_one_mbp_one_ipd', () => {
     const checkout = Checkout(specials);
     checkout.scan(mbp);
     checkout.scan(ipd);
+    checkout.scan(vga);
 
     const consoleSpy = jest.spyOn(console, 'log')
     checkout.total();
