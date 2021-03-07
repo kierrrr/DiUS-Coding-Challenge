@@ -5,26 +5,27 @@ import { CheckoutState, Product } from "./interfaces";
 // you will pay the price of 2 only
 const threeForTwo = (product: Product) => {
     return (state: CheckoutState) => {
-        const allProducts = state.cart
-            .reduce((prev, curr) => {
+        const eligibility = state.cart
+            .reduce((allProducts, currentProduct) => {
 
                 // Ignore the ineligible products for promotion
-                if (curr.sku !== product.sku) {
-                    return { ...prev, newCart: [...prev.newCart, curr] };
+                if (currentProduct.sku !== product.sku) {
+                    return { ...allProducts, newCart: [...allProducts.newCart, currentProduct] };
                 };
 
                 // Every 3rd product is free
-                const newPrice = (prev.count % 3 === 0) ? 0 : curr.price;
-                const productOnSpecial: Product = { ...curr, price: newPrice };
+                const newPrice = (allProducts.promotionCount % 3 === 0) ? 0 : currentProduct.price;
+                const productOnSpecial: Product = { ...currentProduct, price: newPrice };
                 return {
-                    ...prev,
-                    productsOnSpecial: [...prev.productsOnSpecial, productOnSpecial],
-                    count: prev.count + 1
+                    ...allProducts,
+                    productsOnSpecial: [...allProducts.productsOnSpecial, productOnSpecial],
+                    promotionCount: allProducts.promotionCount + 1
                 };
-            }, { newCart: new Array<Product>(), productsOnSpecial: new Array<Product>(), count: 1 });
+            }, { newCart: new Array<Product>(), productsOnSpecial: new Array<Product>(), promotionCount: 1 });
 
-        state.cart = allProducts.newCart;
-        state.checkoutProducts = [...state.checkoutProducts, ...allProducts.productsOnSpecial];
+        // Update the state of the cart
+        state.cart = eligibility.newCart;
+        state.checkoutProducts = [...state.checkoutProducts, ...eligibility.productsOnSpecial];
     }
 };
 
@@ -33,15 +34,20 @@ const threeForTwo = (product: Product) => {
 // to $499.99 each, if someone buys more than 4
 const bulkDiscount = (product: Product, threshold: number, price: number) => {
     return (state: CheckoutState) => {
-        const allProducts = state.cart
-            .reduce((prev, curr) => {
-                if (curr.sku !== product.sku) {
-                    return { ...prev, newCart: [...prev.newCart, curr] };
+        const eligibility = state.cart
+            .reduce((allProducts, currentProduct) => {
+
+                // Ignore the ineligible products for promotion
+                if (currentProduct.sku !== product.sku) {
+                    return { ...allProducts, newCart: [...allProducts.newCart, currentProduct] };
                 };
-                return { ...prev, productsOnSpecial: [...prev.productsOnSpecial, curr] };
+
+                // Otherwise, keep track of the eligible ones
+                return { ...allProducts, productsOnSpecial: [...allProducts.productsOnSpecial, currentProduct] };
             }, { newCart: new Array<Product>(), productsOnSpecial: new Array<Product>() });
 
-        const productsOnSpecial = allProducts.productsOnSpecial
+        // Update the price of each product that is eligible
+        const productsOnSpecial = eligibility.productsOnSpecial
             .map((currentProduct, _, allProducts) => {
                 return {
                     ...currentProduct,
@@ -49,40 +55,47 @@ const bulkDiscount = (product: Product, threshold: number, price: number) => {
                 };
             });
 
-        state.cart = allProducts.newCart;
+        // Update state of the cart
+        state.cart = eligibility.newCart;
         state.checkoutProducts = [...state.checkoutProducts, ...productsOnSpecial];
     };
 };
 
 // Generic promotion for a free product when you buy a particular product
 // Example: we will bundle in a free VGA adapter free of charge with every MacBook Pro sold
-const freeProduct = (product: Product, freeProduct: Product) => {
+const freeItem = (product: Product, freeProduct: Product) => {
     return (state: CheckoutState) => {
 
-        let numberOfProductOnSpecial = state.cart.filter(curr => curr.sku === product.sku).length;
+        let numberOfEligibleProducts = state.cart.filter(curr => curr.sku === product.sku).length;
 
-        const allProducts = state.cart
+        const eligibility = state.cart
             .reduce((prev, curr) => {
 
+                // Keeps track of the product that links to the promotion
                 if (curr.sku === product.sku) {
                     return { ...prev, productsOnSpecial: [...prev.productsOnSpecial, curr] };
-                } else if (curr.sku === freeProduct.sku && numberOfProductOnSpecial > 0) {
-                    numberOfProductOnSpecial -= 1;
-                    const free: Product = { ...curr, price: 0 };
-                    return { ...prev, productsOnSpecial: [...prev.productsOnSpecial, free] };
-                } else {
+                }
+                // Change the price of the free item as it is eligible in this promotion
+                else if (curr.sku === freeProduct.sku && numberOfEligibleProducts > 0) {
+                    numberOfEligibleProducts -= 1; // Keep track of the number of free products we can give away
+                    const freeProduct: Product = { ...curr, price: 0 };
+                    return { ...prev, productsOnSpecial: [...prev.productsOnSpecial, freeProduct] };
+                }
+                // Ignore the ineligible products for promotion
+                else {
                     return { ...prev, newCart: [...prev.newCart, curr] };
                 }
 
             }, { newCart: new Array<Product>(), productsOnSpecial: new Array<Product>() });
 
-        state.cart = allProducts.newCart;
-        state.checkoutProducts = [...state.checkoutProducts, ...allProducts.productsOnSpecial];
+        // Update state of the cart
+        state.cart = eligibility.newCart;
+        state.checkoutProducts = [...state.checkoutProducts, ...eligibility.productsOnSpecial];
     };
 }
 
 export {
     threeForTwo,
     bulkDiscount,
-    freeProduct
+    freeItem
 };

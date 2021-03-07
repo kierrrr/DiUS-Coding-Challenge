@@ -5,6 +5,6 @@ var stock_1 = require("./stock");
 var allPromotions = [
     promotionFunctions_1.threeForTwo(stock_1["default"]["atv"]),
     promotionFunctions_1.bulkDiscount(stock_1["default"]["ipd"], 4, 499.99),
-    promotionFunctions_1.freeProduct(stock_1["default"]["mbp"], stock_1["default"]["vga"])
+    promotionFunctions_1.freeItem(stock_1["default"]["mbp"], stock_1["default"]["vga"])
 ];
 exports["default"] = allPromotions;

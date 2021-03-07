@@ -1,5 +1,5 @@
 import { CheckoutState, Product } from "../src/interfaces"
-import { threeForTwo, bulkDiscount, freeProduct } from "../src/promotionFunctions";
+import { threeForTwo, bulkDiscount, freeItem } from "../src/promotionFunctions";
 
 test("test_special_three_for_two_with_three_products", () => {
 
@@ -70,14 +70,14 @@ test("test_special_free_product_all_discounted", () => {
     checkoutState.cart.push(freeStock);
     checkoutState.cart.push(freeStock);
 
-    freeProduct(testStock, freeStock)(checkoutState);
+    freeItem(testStock, freeStock)(checkoutState);
     const totalPrice = getTotalCheckoutPrice(checkoutState);
-    const allFreeProducts = checkoutState.checkoutProducts.filter(product => product.price == 0)
+    const allfreeItems = checkoutState.checkoutProducts.filter(product => product.price == 0)
 
     expect(totalPrice).toBe(2);
     expect(checkoutState.cart.length).toBe(0);
     expect(checkoutState.checkoutProducts.length).toBe(4);
-    expect(allFreeProducts.length).toBe(2);
+    expect(allfreeItems.length).toBe(2);
 });
 
 test("test_special_free_product_none_discounted", () => {
@@ -85,13 +85,13 @@ test("test_special_free_product_none_discounted", () => {
     const anotherStock = { sku: "anotherSky", name: "anotherName", price: 2 };
     const checkoutState = createStoreStocks(3);
 
-    freeProduct(anotherStock, freeStock)(checkoutState);
+    freeItem(anotherStock, freeStock)(checkoutState);
     const totalPrice = getTotalCheckoutPrice(checkoutState);
-    const allFreeProducts = checkoutState.checkoutProducts.filter(product => product.sku == freeStock.sku)
+    const allfreeItems = checkoutState.checkoutProducts.filter(product => product.sku == freeStock.sku)
 
     expect(totalPrice).toBe(3);
     expect(checkoutState.checkoutProducts.length).toBe(0);
-    expect(allFreeProducts.length).toBe(0);
+    expect(allfreeItems.length).toBe(0);
 });
 
 test("test_special_free_product_one_scanned_not_free", () => {
@@ -102,13 +102,13 @@ test("test_special_free_product_one_scanned_not_free", () => {
     // There are only 2 products which matches the freebie. This one not be free
     checkoutState.cart.push(freeStock);
 
-    freeProduct(testStock, freeStock)(checkoutState);
+    freeItem(testStock, freeStock)(checkoutState);
     const totalPrice = getTotalCheckoutPrice(checkoutState);
-    const allFreeProducts = checkoutState.checkoutProducts.filter(product => product.price == 0)
+    const allfreeItems = checkoutState.checkoutProducts.filter(product => product.price == 0)
 
     expect(totalPrice).toBe(3);
     expect(checkoutState.checkoutProducts.length).toBe(4);
-    expect(allFreeProducts.length).toBe(2);
+    expect(allfreeItems.length).toBe(2);
 });
 
 const getTotalCheckoutPrice = (checkoutState: CheckoutState) => {

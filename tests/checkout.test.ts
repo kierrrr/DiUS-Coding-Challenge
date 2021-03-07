@@ -1,6 +1,6 @@
 import Checkout from "../src/checkout";
 import { Product } from "../src/interfaces";
-import { threeForTwo, bulkDiscount, freeProduct } from "../src/promotionFunctions";
+import { threeForTwo, bulkDiscount, freeItem } from "../src/promotionFunctions";
 
 test('test_checkout_three_atvs_one_vga', () => {
     jest.clearAllMocks();
@@ -57,5 +57,5 @@ const mbp: Product = { sku: "mbp", name: "MacBook Pro", price: 1399.99 };
 const specials = [
     threeForTwo(atv),
     bulkDiscount(ipd, 4, 499.99),
-    freeProduct(mbp, vga)
+    freeItem(mbp, vga)
 ];
