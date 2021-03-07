@@ -1,4 +1,4 @@
-import { Product, CheckoutState } from "../src/interfaces"
+import { Product, CheckoutState } from "../src/interfaces";
 import { scanProduct, checkoutTotal } from "../src/checkoutFunctions";
 
 test("test_checkout_scan_products", () => {
@@ -15,6 +15,7 @@ test("test_checkout_scan_products", () => {
     scanProduct(checkoutState).scan(stock2);
     scanProduct(checkoutState).scan(stock3);
 
+    // Test scanning order and all of the orders should be in the cart array
     expect(checkoutState.cart.length).toBe(3);
     expect(checkoutState.cart[0].sku).toBe("sku1");
     expect(checkoutState.cart[0].name).toBe("stock1");
@@ -25,7 +26,7 @@ test("test_checkout_scan_products", () => {
     expect(checkoutState.cart[2].price).toBe(3);
 });
 
-test("test_checkout_total_no_specials", () => {
+test("test_checkout_total_no_promotions", () => {
     const stock1: Product = { sku: "sku1", name: "stock1", price: 1 };
     const stock2: Product = { sku: "sku2", name: "stock2", price: 2 };
     const stock3: Product = { sku: "sku3", name: "stock3", price: 3 };
@@ -35,8 +36,10 @@ test("test_checkout_total_no_specials", () => {
         checkoutProducts: []
     };
 
-    const consoleSpy = jest.spyOn(console, 'log')
+    // Check that the total function outputs something into the console log
+    // and that it correctly calculates the total price
+    const consoleSpy = jest.spyOn(console, 'log');
     checkoutTotal(checkoutState, []).total();
     const consoleMessage = consoleSpy.mock.calls[0][0];
-    expect(consoleMessage).toBe("SKUs Scanned: sku1, sku2, sku3,  Total: $6");
-})
+    expect(consoleMessage).toBe("SKUs Scanned: sku1, sku2, sku3,  Total: $6.00");
+});

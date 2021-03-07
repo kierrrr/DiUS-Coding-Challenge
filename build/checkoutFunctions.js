@@ -31,7 +31,7 @@ var checkoutTotal = function (state, promotions) { return ({
             return prev + (curr.sku + ", ");
         }, "");
         // Not ideal to use the console for output but it will do for now
-        console.log("SKUs Scanned: " + allSkusScanned + " Total: $" + totalPrice);
+        console.log("SKUs Scanned: " + allSkusScanned + " Total: $" + totalPrice.toFixed(2));
     }
 }); };
 exports.checkoutTotal = checkoutTotal;

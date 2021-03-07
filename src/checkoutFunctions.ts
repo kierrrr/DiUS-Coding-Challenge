@@ -29,7 +29,7 @@ const checkoutTotal = (state: CheckoutState, promotions: Promotion[]) => ({
         }, "");
 
         // Not ideal to use the console for output but it will do for now
-        console.log(`SKUs Scanned: ${allSkusScanned} Total: $${totalPrice}`);
+        console.log(`SKUs Scanned: ${allSkusScanned} Total: $${totalPrice.toFixed(2)}`);
     }
 });
 
