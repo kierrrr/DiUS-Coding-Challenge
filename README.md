@@ -22,6 +22,7 @@ yarn test
 ### File structure
 All the source files in the project are in the `/src` folder which also contains the list of products (`stock.ts`) in the store and the promotions (`promotions.ts`) that are currently happening. Typescript will only transpile the files in this folder.
 \
+\
 All the test files are located in the `/src` folder. The transpiled Javascript files are in the `/build` folder which contains the `app.js` file used to run the project.
 ### Architecture
 I have integrated functional programming concepts in this application to avoid the pitfalls of OOP. I have used dependency injection and function composition to make the codebase more modular and allow for easy unit testing. 
@@ -35,7 +36,9 @@ The challenge states that the pricing rules (promotions/prices) can change at an
 ## Tests
 `Jest v26.6.3` was the library I used to make tests but unfortunately some babel libraries were required to get the Jest tests to work with Typescript.
 \
+\
 The beauty of functional programming is that it makes testing a breeze. With this approach, I have able to have full test coverage of the project. 
+\
 \
 Through dependency injection, I was able to test each promotion function by injecting different checkout states which gave me the peace of mind that they would work once I composed it with the whole checkout mechanism.
 ```javascript
