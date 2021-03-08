@@ -1,5 +1,5 @@
 # DiUS Computer Store Checkout
-This repo contains a Javascript project, to the spec given on the [DiUS coding challenge](https://github.com/DiUS/coding-tests/blob/master/dius_shopping.md). This document details assumptions made in producing this project, and more information about decision I made in its creation.
+This repository contains a Javascript project to the spec given on the DiUS coding challenge. This document details assumptions made in producing this project, and more information about decisions I made in its creation.
 
 ## Environment
 This project will build and run using `Node.js v15.8.0` and `yarn`. The language is Javascript using the ES6 standard with `Typescript v4.2.3` for type-checking.
@@ -20,17 +20,17 @@ yarn test
 ```
 ## Project Structure
 ### File structure
-All the source files in the project are in the `/src` folder which also contains the list of products (`stock.ts`) in the store and the promotions (`promotions.ts`) that are currently happening. Typescript will only transpile the files in this folder (we don't need transpile tests!).
+All the source files in the project are in the `/src` folder which also contains the list of products (`stock.ts`) in the store and the promotions (`promotions.ts`) that are currently happening. Typescript will only transpile the files in this folder.
 \
-All the test files are located in the `/src` folder. The transpiled Javascript files are in the `/build/app.js` folder and the `app.js` file is used to run the project.
+All the test files are located in the `/src` folder. The transpiled Javascript files are in the `/build` folder which contains the `app.js` file used to run the project.
 ### Architecture
-I have tried to integrate as many functional programming concepts in this application to avoid the pitfalls of OOP. I have used dependency injection and function composition to make the codebase more modular and allow for easy unit testing. 
+I have integrated functional programming concepts in this application to avoid the pitfalls of OOP. I have used dependency injection and function composition to make the codebase more modular and allow for easy unit testing. 
 \
-The challenge states that the pricing rules can change at any time so I've taken into account the following:
+The challenge states that the pricing rules (promotions/prices) can change at any time so I've taken into account the following:
 - All the products are stored in its own collection so its properties can be easily changed.
-- All promotions can be easily injected into the Checkout, allowing for different checkouts to have different promotions.
-- Each promotion has its own logic to implement the business rules. The function is then curried to apply and modify the checkout state for the promotion eligibility and its discounts or sales. 
-- Each checkout method can be injected into other classes if we ever wanted to reuse scan or checkout methods.
+- All promotions can be injected into the Checkout, allowing for different checkouts to have different promotions.
+- Each promotion has its own logic to implement the business rules. The function then curries a checkout state to apply and modify the checkout instance for promotion eligibility and its discounts or sales. 
+- Each checkout method can be composed into other classes if we ever wanted to reuse scan or checkout methods.
 
 ## Tests
 `Jest v26.6.3` was the library I used to make tests but unfortunately some babel libraries were required to get the Jest tests to work with Typescript.
